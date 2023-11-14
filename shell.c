@@ -34,6 +34,25 @@ int main(void)
 			exit(1);
 		}
 
+		if (pid == 0)
+		{
+			char *args[] = {command, NULL};
+			execve(command, args, NULL);
+			perror("Error");
+			exit(1);
+		}
+
+		else
+		{
+			int status;
+			waitpid(pid, &status, 0);
+
+			if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+			{
+				write(STDERR_FILENO, "Unrecognized Command\n",
+						sizeof("Unrecognized Command\n") - 1);
+			}
+		}
 	}
 	return (0);
 }
