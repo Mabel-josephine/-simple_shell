@@ -18,7 +18,6 @@ int main(void)
 	while (1)
 	{
 		write(STDOUT_FILENO, "Simple_Shell>", sizeof("Simple_Shell>") - 1);
-		fflush(stdout);
 
 		if (fgets(command, sizeof(command), stdin) == NULL)
 		{
@@ -37,22 +36,20 @@ int main(void)
 		if (pid == 0)
 		{
 			char *args[] = {command, NULL};
+
 			execve(command, args, NULL);
-			perror("Error");
 			exit(1);
 		}
 
 		else
 		{
 			int status;
+
 			waitpid(pid, &status, 0);
 
 			if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
 			{
-				write(STDERR_FILENO, "Unrecognized Command\n",
-						sizeof("Unrecognized Command\n") - 1);
-			}
-		}
-	}
+				write(STDERR_FILENO, "Not recognized\n", sizeof("Not recognized\n") - 1);
+			}}}
 	return (0);
 }
