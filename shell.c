@@ -9,6 +9,7 @@
 /**
  * executeCommand - Executes the command
  *
+ * @command: the command to execute
  * Return: Always 0
  */
 
@@ -44,6 +45,5 @@ void executeCommand(char *command)
 					sizeof("Unrecognized Command\n") - 1);
 		}
 	}
-	
 }
 
