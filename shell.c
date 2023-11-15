@@ -4,52 +4,46 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include "main.h"
 
 /**
- * main - Start of the program
+ * executeCommand - Executes the command
  *
  * Return: Always 0
  */
 
-int main(void)
+void executeCommand(char *command)
+
 {
-	char command[100];
+	pid_t pid = fork();
 
-	while (1)
+	if (pid == -1)
 	{
-		write(STDOUT_FILENO, "Simple_Shell>", sizeof("Simple_Shell>") - 1);
+		perror("Error");
+		exit(1);
+	}
 
-		if (fgets(command, sizeof(command), stdin) == NULL)
+	if (pid == 0)
+	{
+		char *args[] = {command, NULL};
+
+		execve(command, args, NULL);
+		perror("Error");
+		exit(1);
+	}
+
+	else
+	{
+		int status;
+
+		waitpid(pid, &status, 0);
+
+		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
 		{
-			write(STDOUT_FILENO, "Exiting Shell..\n", sizeof("Exiting Shell..\n") - 1);
-			break;
+			write(STDERR_FILENO, "Unrecognized Command\n",
+					sizeof("Unrecognized Command\n") - 1);
 		}
-
-		pid_t pid = fork();
-
-		if (pid == -1)
-		{
-			perror("Error");
-			exit(1);
-		}
-
-		if (pid == 0)
-		{
-			char *args[] = {command, NULL};
-
-			execve(command, args, NULL);
-			exit(1);
-		}
-
-		else
-		{
-			int status;
-
-			waitpid(pid, &status, 0);
-
-			if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-			{
-				write(STDERR_FILENO, "Not recognized\n", sizeof("Not recognized\n") - 1);
-			}}}
-	return (0);
+	}
+	
 }
+
