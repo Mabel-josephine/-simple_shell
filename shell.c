@@ -4,46 +4,56 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include "main.h"
 
-/**
- * executeCommand - Executes the command
- *
- * @command: the command to execute
- * Return: Always 0
- */
 
-void executeCommand(char *command)
+ int main(void)
+ {
+         char command[100];
+         pid_t pid;
+while (1)
+ {
+write(STDOUT_FILENO, "please enter a command:",
+sizeof("Please enter a command:") -1);
+ fflush(stdout);
+   /*Handle Ctrl+D (end of file)*/
 
-{
-	pid_t pid = fork();
-
-	if (pid == -1)
-	{
-		perror("Error");
-		exit(1);
-	}
-
-	if (pid == 0)
-	{
-		char *args[] = {command, NULL};
-
-		execve(command, args, NULL);
-		perror("Error");
-		exit(1);
-	}
-
-	else
-	{
-		int status;
-
-		waitpid(pid, &status, 0);
-
-		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-		{
-			write(STDERR_FILENO, "Unrecognized Command\n",
-					sizeof("Unrecognized Command\n") - 1);
-		}
-	}
+if (fgets(command, sizeof(command),stdin) == NULL)
+ {
+write(STDOUT_FILENO, "\nExiting Simple Shell...\n",
+sizeof("\nExiting Simple Shell...\n") -1);
+break;
 }
+
+   /*Remove the newline character from the end of the command*/
+
+ pid = fork();
+
+ if (pid == -1)
+{
+
+/*execute the command in the child process*/
+
+
+
+
+perror("Unable to start new process"); exit(1);
+ }
+
+ }
+
+ int main(void){
+	 char command[] = "/bin/ls";
+
+	 /*command to execute*/
+	 executeCommand(command);
+
+	 return 0;
+ }
+
+
+
+
+
+
+
 
