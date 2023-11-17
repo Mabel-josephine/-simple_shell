@@ -25,9 +25,11 @@ void executeCommand(char *command)
 
 	if (pid == 0)
 	{
-		char *args[] = {command, NULL};
+		char *args[2];
+		args[0]	= command;
+		args[1] = NULL;
 
-		execlp(command, command, NULL);
+		execve(command, args, NULL);
 		perror("Error executing command");
 		exit(1);
 	}
