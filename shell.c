@@ -25,23 +25,10 @@ void executeCommand(char *command)
 
 	if (pid == 0)
 	{
-		char *args[2];
-		args[0]	= command;
-		args[1] = NULL;
+		char *args[] = {command, NULL};
 
-		char **memArgs = malloc(sizeof(char *) * 2);
-		if (memArgs == NULL) {
-			perror("Memory allocation error");
-			exit(1);
-		}
-
-		memArgs[0] = strdup(command);
-		memArgs[1] = NULL;
-
-		execvp(memArgs[0], memArgs);
+		execve(command, args, NULL);
 		perror("Error executing command");
-		free(memArgs[0]);
-		free(memArgs);
 		exit(1);
 	}
 
