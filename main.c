@@ -24,6 +24,15 @@ int main(void)
 			write(STDOUT_FILENO, "Exiting Shell..\n", sizeof("Exiting Shell..\n") - 1);
 			break;
 		}
+
+		size_t length = strlen(command);
+
+		if (length > 0 && command[length - 1] == '\n')
+		{
+			command[length - 1] = '\0';
+		}
+
+		executeCommand(command);
 	}
 	return (0);
 }
