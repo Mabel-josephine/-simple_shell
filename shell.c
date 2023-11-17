@@ -27,7 +27,7 @@ void executeCommand(char *command)
 	{
 		char *args[] = {command, NULL};
 
-		if (execve(command, args, NULL) == -1);
+		execlp(command, command, NULL);
 		perror("Error executing command");
 		exit(1);
 	}
